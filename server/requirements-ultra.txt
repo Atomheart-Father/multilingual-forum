@@ -1,0 +1,15 @@
+# 🌍 超轻量级部署 - 最小外部依赖
+# 使用Python标准库实现HTTP服务器，100%兼容所有Python版本
+
+# 添加一个基础包避免空requirements问题
+certifi==2023.7.22  # SSL证书，纯数据包，无版本兼容性问题
+
+# Python标准库已包含所需的所有功能：
+# - http.server (HTTP服务器)
+# - json (JSON处理)
+# - urllib.parse (URL解析)
+# - logging (日志记录)
+# - time, os (系统功能)
+
+# 如果需要真实翻译功能，可以取消注释以下行：
+# requests==2.31.0  # 用于HTTP请求（如调用OpenAI API） 

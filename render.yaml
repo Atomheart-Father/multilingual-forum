@@ -4,8 +4,8 @@ services:
     runtime: python
     plan: free
     region: oregon
-    buildCommand: cd server && pip install --upgrade pip && pip install -r requirements-render.txt
-    startCommand: cd server && python main-simple.py
+    buildCommand: cd server && pip install --upgrade pip && pip install -r requirements-ultra.txt
+    startCommand: cd server && python main-ultra-simple.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.11
