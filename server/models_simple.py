@@ -42,7 +42,7 @@ class PostCreate(BaseModel):
     title: str
     content: str
     author: str
-    language: LanguageCode = LanguageCode.EN
+    language: LanguageCode
 
 class PostResponse(BaseModel):
     id: str
@@ -51,19 +51,19 @@ class PostResponse(BaseModel):
     author: str
     language: str
     timestamp: str
-    likes: int = 0
+    likes: int
 
 # 翻译模型
 class TranslationRequest(BaseModel):
     text: str
     target_lang: LanguageCode
     source_lang: Optional[LanguageCode] = None
-    service: TranslationService = TranslationService.LOCAL
+    service: TranslationService = TranslationService.OPENAI
 
 class TranslationResponse(BaseModel):
     translated_text: str
     service: str
-    detected_language: Optional[str] = None
+    detected_language: str
 
 # 错误响应
 class ErrorResponse(BaseModel):
