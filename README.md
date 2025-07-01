@@ -133,9 +133,9 @@ RATE_LIMIT_WINDOW_MS=60000
 
 ### GitHub Pages + 云端后端
 
-由于项目包含后端，推荐以下部署方案：
+我们推荐使用**完全免费**的云服务：
 
-#### 前端部署到Vercel
+#### 🆓 前端部署到Vercel (免费)
 1. Fork此仓库到你的GitHub
 2. 在[Vercel](https://vercel.com)创建新项目
 3. 选择你的GitHub仓库
@@ -144,12 +144,17 @@ RATE_LIMIT_WINDOW_MS=60000
    - **Root Directory**: `client`
    - **Build Command**: `npm run build`
    - **Output Directory**: `build`
+   - **Environment Variables**: `REACT_APP_API_URL=https://your-api.onrender.com`
 
-#### 后端部署到Railway/Render
-1. 在[Railway](https://railway.app)或[Render](https://render.com)创建新服务
+#### 🆓 后端部署到Render (免费)
+1. 在[Render](https://render.com)创建新的Web Service
 2. 连接你的GitHub仓库
-3. 设置环境变量
-4. 服务会自动部署
+3. 配置服务：
+   - **Build Command**: `cd server && pip install -r requirements.txt`
+   - **Start Command**: `cd server && python main.py`
+4. 设置环境变量 (详见 [免费部署指南](docs/free-deployment-guide.md))
+
+💰 **总成本**: $0/月 - 完全免费！🎉
 
 ### Docker部署
 

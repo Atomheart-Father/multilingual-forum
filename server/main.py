@@ -32,13 +32,24 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS配置
-allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+# CORS配置 - 支持本地开发和Vercel部署
+allowed_origins_str = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000")
+allowed_origins = [origin.strip() for origin in allowed_origins_str.split(",")]
+
+# 如果是生产环境且没有明确设置CORS，添加常见的Vercel模式
+if os.getenv("NODE_ENV") == "production" and len(allowed_origins) == 1 and allowed_origins[0] == "http://localhost:3000":
+    allowed_origins.extend([
+        "https://*.vercel.app",
+        "https://multilingual-forum.vercel.app"
+    ])
+
+print(f"🌐 CORS允许的源: {allowed_origins}")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 

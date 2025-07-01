@@ -7,6 +7,7 @@ import CreatePost from './components/CreatePost';
 import Settings from './components/Settings';
 import ErrorBoundary from './components/ErrorBoundary';
 import { toast } from 'react-toastify';
+import config from './config';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -38,7 +39,7 @@ function App() {
 
   const fetchSupportedLanguages = async () => {
     try {
-      const response = await fetch('/api/translate/languages');
+      const response = await fetch(`${config.API_BASE_URL}/api/translate/languages`);
       const languages = await response.json();
       setSupportedLanguages(languages);
     } catch (error) {
