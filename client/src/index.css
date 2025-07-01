@@ -1,0 +1,69 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Smooth transitions */
+* {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Language badge styles */
+.language-badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.language-badge.en {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.language-badge.zh {
+  @apply bg-red-100 text-red-800;
+}
+
+.language-badge.es {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.language-badge.fr {
+  @apply bg-purple-100 text-purple-800;
+}
+
+.language-badge.de {
+  @apply bg-gray-100 text-gray-800;
+}
+
+.language-badge.default {
+  @apply bg-green-100 text-green-800;
+} 
