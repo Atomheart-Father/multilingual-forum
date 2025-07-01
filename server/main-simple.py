@@ -14,11 +14,25 @@ logger = logging.getLogger(__name__)
 
 # 优先使用简化的模型，避免复杂依赖
 try:
-    from models_simple import *
+    from models_simple import (
+        TranslationRequest, 
+        TranslationResponse, 
+        TranslationService,
+        LanguageCode,
+        PostCreate, 
+        PostResponse
+    )
     logger.info("✅ 使用简化模型 (models_simple.py)")
 except ImportError:
     try:
-        from models import *
+        from models import (
+            TranslationRequest, 
+            TranslationResponse, 
+            TranslationService,
+            LanguageCode,
+            PostCreate, 
+            PostResponse
+        )
         logger.info("⚠️ 使用完整模型 (models.py)")
     except ImportError:
         logger.error("❌ 无法导入任何模型文件")
