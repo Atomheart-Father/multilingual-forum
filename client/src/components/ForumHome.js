@@ -254,7 +254,7 @@ function ForumHome({ user, userLanguage, supportedLanguages }) {
                     className="flex items-center space-x-1 text-gray-500 hover:text-primary-600 transition-colors"
                   >
                     <ChatBubbleLeftIcon className="h-5 w-5" />
-                    <span className="text-sm font-medium">{post.replies.length}</span>
+                    <span className="text-sm font-medium">{post.replies?.length || 0}</span>
                   </Link>
                 </div>
 

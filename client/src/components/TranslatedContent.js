@@ -7,7 +7,6 @@ function TranslatedContent({ content, sourceLanguage, targetLanguage, className 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showOriginal, setShowOriginal] = useState(false);
-  const [translationService, setTranslationService] = useState('local');
 
   // 安全检查 props
   const safeContent = content || '';
@@ -33,7 +32,7 @@ function TranslatedContent({ content, sourceLanguage, targetLanguage, className 
           text: safeContent,
           source_lang: safeSourceLang,
           target_lang: safeTargetLang,
-          service: translationService
+          service: 'local' // 固定使用local服务
         }),
       });
 

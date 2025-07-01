@@ -10,6 +10,7 @@ import {
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import TranslatedContent from './TranslatedContent';
 import { toast } from 'react-toastify';
+import config from '../config';
 
 function PostDetail({ user, userLanguage, supportedLanguages }) {
   const { id } = useParams();
@@ -24,7 +25,7 @@ function PostDetail({ user, userLanguage, supportedLanguages }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchPost = React.useCallback(async () => {
     try {
-      const response = await fetch(`/api/posts/${id}/`);
+      const response = await fetch(`${config.API_BASE_URL}${config.API_ENDPOINTS.POSTS}/${id}`);
       const data = await response.json();
 
       if (response.ok) {
@@ -54,7 +55,7 @@ function PostDetail({ user, userLanguage, supportedLanguages }) {
     const action = liked ? 'unlike' : 'like';
 
     try {
-      const response = await fetch(`/api/posts/${id}/like`, {
+      const response = await fetch(`${config.API_BASE_URL}${config.API_ENDPOINTS.POSTS}/${id}/like`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +92,7 @@ function PostDetail({ user, userLanguage, supportedLanguages }) {
 
     setSubmittingReply(true);
     try {
-      const response = await fetch(`/api/posts/${id}/reply`, {
+      const response = await fetch(`${config.API_BASE_URL}${config.API_ENDPOINTS.POSTS}/${id}/reply`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -108,7 +109,7 @@ function PostDetail({ user, userLanguage, supportedLanguages }) {
       if (response.ok) {
         setPost(prev => ({
           ...prev,
-          replies: [...prev.replies, data]
+          replies: [...(prev.replies || []), data]
         }));
         setReplyContent('');
         toast.success('Reply posted successfully!');
@@ -244,7 +245,7 @@ function PostDetail({ user, userLanguage, supportedLanguages }) {
 
           <div className="flex items-center space-x-2 text-gray-500">
             <ChatBubbleLeftIcon className="h-6 w-6" />
-            <span className="font-medium">{post.replies.length}</span>
+            <span className="font-medium">{post.replies?.length || 0}</span>
             <span>Replies</span>
           </div>
         </div>
@@ -317,12 +318,12 @@ function PostDetail({ user, userLanguage, supportedLanguages }) {
 
       {/* Replies */}
       <div className="space-y-4">
-        {post.replies.length > 0 ? (
+        {(post.replies?.length || 0) > 0 ? (
           <>
             <h3 className="text-xl font-semibold text-gray-900">
-              Replies ({post.replies.length})
+              Replies ({post.replies?.length || 0})
             </h3>
-            {post.replies.map((reply) => (
+            {(post.replies || []).map((reply) => (
               <div key={reply.id} className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="flex items-start space-x-3">
                   <div className="h-10 w-10 bg-gray-600 rounded-full flex items-center justify-center">
