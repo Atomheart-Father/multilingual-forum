@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
+import config from '../config';
 
 function LoginModal({ onClose, onLogin }) {
   const [username, setUsername] = useState('');
@@ -15,7 +16,7 @@ function LoginModal({ onClose, onLogin }) {
 
     setLoading(true);
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(`${config.API_BASE_URL}${config.API_ENDPOINTS.AUTH}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
+import config from '../config';
 
 function CreatePost({ user, userLanguage, supportedLanguages }) {
   const [title, setTitle] = useState('');
@@ -25,7 +26,7 @@ function CreatePost({ user, userLanguage, supportedLanguages }) {
 
     setLoading(true);
     try {
-      const response = await fetch('/api/posts/', {
+      const response = await fetch(`${config.API_BASE_URL}${config.API_ENDPOINTS.POSTS}/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

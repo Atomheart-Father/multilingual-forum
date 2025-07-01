@@ -10,6 +10,7 @@ import {
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import TranslatedContent from './TranslatedContent';
 import { toast } from 'react-toastify';
+import config from '../config';
 
 function ForumHome({ user, userLanguage, supportedLanguages }) {
   const [posts, setPosts] = useState([]);
@@ -20,7 +21,7 @@ function ForumHome({ user, userLanguage, supportedLanguages }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchPosts = React.useCallback(async () => {
     try {
-      const response = await fetch('/api/posts/');
+      const response = await fetch(`${config.API_BASE_URL}${config.API_ENDPOINTS.POSTS}/`);
       const data = await response.json();
       
       if (response.ok) {
@@ -50,7 +51,7 @@ function ForumHome({ user, userLanguage, supportedLanguages }) {
     const action = isLiked ? 'unlike' : 'like';
 
     try {
-      const response = await fetch(`/api/posts/${postId}/like`, {
+      const response = await fetch(`${config.API_BASE_URL}${config.API_ENDPOINTS.POSTS}/${postId}/like`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -84,8 +85,6 @@ function ForumHome({ user, userLanguage, supportedLanguages }) {
       toast.error('Failed to update like');
     }
   };
-
-
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowPathIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import config from '../config';
 
 function TranslatedContent({ content, sourceLanguage, targetLanguage, className = '' }) {
   const [translatedText, setTranslatedText] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showOriginal, setShowOriginal] = useState(false);
+  const [translationService, setTranslationService] = useState('local');
 
   // 安全检查 props
   const safeContent = content || '';
@@ -22,7 +24,7 @@ function TranslatedContent({ content, sourceLanguage, targetLanguage, className 
     setError(null);
 
     try {
-      const response = await fetch('/api/translate/', {
+      const response = await fetch(`${config.API_BASE_URL}${config.API_ENDPOINTS.TRANSLATE}/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -31,7 +33,7 @@ function TranslatedContent({ content, sourceLanguage, targetLanguage, className 
           text: safeContent,
           source_lang: safeSourceLang,
           target_lang: safeTargetLang,
-          service: 'local' // Use local translation by default
+          service: translationService
         }),
       });
 
