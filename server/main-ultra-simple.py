@@ -37,7 +37,7 @@ class MultillingualForumHandler(BaseHTTPRequestHandler):
                 self.send_json_response({
                     "message": "🌍 Multilingual Forum API is running!",
                     "version": "ultra-simple",
-                    "features": ["posts", "translation", "health-check"],
+                    "features": ["posts", "translation", "health-check", "replies", "likes"],
                     "docs": "API endpoints: /api/health, /api/posts/, /api/translate/languages"
                 })
             elif path == '/api/health':
@@ -94,6 +94,10 @@ class MultillingualForumHandler(BaseHTTPRequestHandler):
                 self.create_post(data)
             elif path == '/api/translate/':
                 self.translate_text(data)
+            elif path.startswith('/api/posts/') and path.endswith('/reply'):
+                # 处理回复: /api/posts/{id}/reply
+                post_id = path.split('/')[-2]
+                self.add_reply(post_id, data)
             else:
                 self.send_error_response(404, "Not found")
                 
@@ -101,6 +105,27 @@ class MultillingualForumHandler(BaseHTTPRequestHandler):
             self.send_error_response(400, "Invalid JSON")
         except Exception as e:
             logger.error(f"POST error: {str(e)}")
+            self.send_error_response(500, f"Internal server error: {str(e)}")
+
+    def do_PUT(self):
+        """处理PUT请求（点赞功能）"""
+        try:
+            path = urlparse(self.path).path
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length).decode('utf-8')
+            data = json.loads(post_data)
+            
+            if path.startswith('/api/posts/') and path.endswith('/like'):
+                # 处理点赞: /api/posts/{id}/like
+                post_id = path.split('/')[-2]
+                self.toggle_like(post_id, data)
+            else:
+                self.send_error_response(404, "Not found")
+                
+        except json.JSONDecodeError:
+            self.send_error_response(400, "Invalid JSON")
+        except Exception as e:
+            logger.error(f"PUT error: {str(e)}")
             self.send_error_response(500, f"Internal server error: {str(e)}")
 
     def create_post(self, data):
@@ -113,13 +138,61 @@ class MultillingualForumHandler(BaseHTTPRequestHandler):
                 "author": data.get("author", "Anonymous"),
                 "language": data.get("language", "en"),
                 "timestamp": str(int(time.time())),
-                "likes": 0
+                "likes": 0,
+                "replies": []  # 添加回复字段
             }
             posts_db.append(new_post)
             self.send_json_response(new_post)
             logger.info(f"Created post: {new_post['title']}")
         except Exception as e:
             self.send_error_response(400, f"Error creating post: {str(e)}")
+
+    def add_reply(self, post_id, data):
+        """添加回复"""
+        try:
+            post = self.get_post_by_id(post_id)
+            if not post:
+                self.send_error_response(404, "Post not found")
+                return
+            
+            new_reply = {
+                "id": str(int(time.time() * 1000)),  # 使用时间戳作为ID
+                "content": data.get("content", ""),
+                "author": data.get("author", "Anonymous"),
+                "language": data.get("language", "en"),
+                "timestamp": str(int(time.time()))
+            }
+            
+            # 确保replies字段存在
+            if "replies" not in post:
+                post["replies"] = []
+            
+            post["replies"].append(new_reply)
+            self.send_json_response(new_reply)
+            logger.info(f"Added reply to post {post_id} by {new_reply['author']}")
+            
+        except Exception as e:
+            self.send_error_response(400, f"Error adding reply: {str(e)}")
+
+    def toggle_like(self, post_id, data):
+        """切换点赞状态"""
+        try:
+            post = self.get_post_by_id(post_id)
+            if not post:
+                self.send_error_response(404, "Post not found")
+                return
+            
+            action = data.get("action", "like")
+            if action == "like":
+                post["likes"] = post.get("likes", 0) + 1
+            elif action == "unlike":
+                post["likes"] = max(0, post.get("likes", 0) - 1)
+            
+            self.send_json_response({"likes": post["likes"]})
+            logger.info(f"Post {post_id} {action}d, new count: {post['likes']}")
+            
+        except Exception as e:
+            self.send_error_response(400, f"Error toggling like: {str(e)}")
 
     def translate_text(self, data):
         """翻译文本（简化版）"""
@@ -159,6 +232,9 @@ class MultillingualForumHandler(BaseHTTPRequestHandler):
         """通过ID获取帖子"""
         for post in posts_db:
             if post["id"] == post_id:
+                # 确保帖子有replies字段
+                if "replies" not in post:
+                    post["replies"] = []
                 return post
         return None
 
@@ -199,6 +275,7 @@ def run_server():
     logger.info("💾 使用内存存储")
     logger.info("🔧 100%标准库实现，零外部依赖")
     logger.info(f"🌍 服务器启动在端口 {port}")
+    logger.info("✨ 支持功能: 帖子、翻译、回复、点赞")
     
     server = HTTPServer(('0.0.0.0', port), MultillingualForumHandler)
     
