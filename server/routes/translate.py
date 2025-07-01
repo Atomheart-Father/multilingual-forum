@@ -290,7 +290,23 @@ class TranslationService:
                 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
                 from transformers.pipelines import pipeline
             except ImportError:
-                raise Exception("Local transformers not available. Install with: pip install torch transformers")
+                logger.warning("Transformers库未安装，降级到云端翻译服务")
+                # 在云端部署时，自动降级到其他翻译服务
+                for service in ["openai", "azure", "google", "deepl"]:
+                    try:
+                        if service in self.services:
+                            logger.info(f"尝试使用{service}翻译服务作为本地模型的替代")
+                            return await self.services[service](text, target_lang, source_lang)
+                    except Exception as e:
+                        logger.warning(f"{service}服务也不可用: {str(e)}")
+                        continue
+                
+                # 如果所有服务都不可用，返回原文
+                return {
+                    "translated_text": text,
+                    "service": "local_fallback",
+                    "detected_language": source_lang
+                }
             
             # 构建语言对模型名称
             if source_lang == "auto":
