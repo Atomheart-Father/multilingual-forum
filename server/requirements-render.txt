@@ -1,26 +1,34 @@
-# 🌍 Render超轻量级部署 - 避免Rust编译问题
-# 使用较低版本的依赖，确保有预编译wheel
+# 🌍 Render超轻量级部署 - 100%纯Python，无编译依赖
+# 专为云端免费部署优化，避免所有C扩展和Rust编译
 
-# Web框架 - 使用较低版本避免Rust依赖
+# Web框架 - 使用较低版本，纯Python实现
 fastapi==0.68.0
-uvicorn[standard]==0.15.0
 
-# HTTP客户端
+# ASGI服务器 - 纯Python实现，无C扩展
+uvicorn==0.15.0
+# 注意：不使用[standard]版本，避免httptools和uvloop依赖
+
+# HTTP客户端 - 纯Python
 httpx==0.24.1
 
 # 环境变量
 python-dotenv==0.19.2
 
-# 数据验证 - 使用pydantic v1避免Rust编译
+# 数据验证 - pydantic v1，纯Python
 pydantic==1.10.7
 
-# 基础工具
+# 日期处理
 python-dateutil==2.8.2
 
-# 云端翻译API (可选，需要API密钥时取消注释)
+# 云端翻译API支持 (可选)
 # openai==0.27.8
-# azure-ai-translation-text==1.0.0
-# deepl==1.12.0
+
+# 🚀 完全避免的依赖项（这些会导致编译错误）：
+# ❌ httptools (C扩展)
+# ❌ uvloop (C扩展) 
+# ❌ pydantic v2 (Rust核心)
+# ❌ 任何machine learning库
+# ❌ 任何需要编译的数据库驱动
 
 # 注意：已移除所有需要编译的依赖
 # 如果需要翻译功能，请在环境变量中配置API密钥 

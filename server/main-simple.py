@@ -8,15 +8,21 @@ from typing import Dict, Any
 import time
 import logging
 
-# 使用简化的模型
-try:
-    from models import *
-except ImportError:
-    from models-simple import *
-
 # 配置日志
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# 优先使用简化的模型，避免复杂依赖
+try:
+    from models_simple import *
+    logger.info("✅ 使用简化模型 (models_simple.py)")
+except ImportError:
+    try:
+        from models import *
+        logger.info("⚠️ 使用完整模型 (models.py)")
+    except ImportError:
+        logger.error("❌ 无法导入任何模型文件")
+        raise
 
 # 加载环境变量
 load_dotenv()
@@ -24,8 +30,8 @@ load_dotenv()
 # 创建FastAPI应用
 app = FastAPI(
     title="Multilingual Forum API",
-    description="AI-powered multilingual forum",
-    version="1.0.0"
+    description="AI-powered multilingual forum - Ultra Lightweight Version",
+    version="1.0.0-simple"
 )
 
 # CORS配置
@@ -52,9 +58,21 @@ app.add_middleware(
 posts_db = []
 translations_cache = {}
 
+@app.on_event("startup")
+async def startup_event():
+    """应用启动时的事件"""
+    logger.info("🚀 Multilingual Forum API (简化版) 启动中...")
+    logger.info("💾 使用内存存储")
+    logger.info("🔧 纯Python实现，无C扩展依赖")
+
 @app.get("/")
 async def root():
-    return {"message": "🌍 Multilingual Forum API is running!", "docs": "/docs"}
+    return {
+        "message": "🌍 Multilingual Forum API is running!",
+        "version": "1.0.0-simple",
+        "features": ["posts", "translation", "health-check"],
+        "docs": "/docs"
+    }
 
 @app.get("/api/health")
 async def health_check():
@@ -62,7 +80,7 @@ async def health_check():
     return {
         "status": "OK",
         "timestamp": time.time(),
-        "version": "1.0.0",
+        "version": "1.0.0-simple",
         "posts_count": len(posts_db)
     }
 
