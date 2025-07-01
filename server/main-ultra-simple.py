@@ -6,6 +6,7 @@
 
 import json
 import os
+import sys
 import time
 import logging
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -45,7 +46,7 @@ class MultillingualForumHandler(BaseHTTPRequestHandler):
                     "timestamp": time.time(),
                     "version": "ultra-simple",
                     "posts_count": len(posts_db),
-                    "python_version": f"{os.sys.version_info.major}.{os.sys.version_info.minor}.{os.sys.version_info.micro}"
+                    "python_version": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
                 })
             elif path == '/api/posts/':
                 self.send_json_response({
