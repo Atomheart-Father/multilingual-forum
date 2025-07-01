@@ -5,20 +5,12 @@ services:
     plan: free
     region: oregon
     buildCommand: cd server && pip install --upgrade pip && pip install -r requirements-render.txt
-    startCommand: cd server && python main.py
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.0
-      - key: NODE_ENV
-        value: production
-      - key: ALLOWED_ORIGINS
-        value: https://multilingual-forum.vercel.app,https://*.vercel.app
-      - key: LOCAL_MODEL_TYPE
-        value: transformers
-      - key: LOCAL_MODEL_NAME
-        value: helsinki-nlp/opus-mt-en-zh
-      - key: RATE_LIMIT_MAX_REQUESTS
-        value: 1000
-      - key: RATE_LIMIT_WINDOW_MS
-        value: 60000
+    startCommand: cd server && python main-simple.py
+          envVars:
+        - key: PYTHON_VERSION
+          value: 3.11.0
+        - key: NODE_ENV
+          value: production
+        - key: ALLOWED_ORIGINS
+          value: https://multilingual-forum.vercel.app
     healthCheckPath: /api/health 

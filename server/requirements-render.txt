@@ -1,36 +1,26 @@
-# 🌍 Render部署专用 - 轻量级依赖列表
-# 排除了大型ML库，使用云端翻译API
+# 🌍 Render超轻量级部署 - 避免Rust编译问题
+# 使用较低版本的依赖，确保有预编译wheel
 
-# Web框架
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-python-multipart==0.0.6
+# Web框架 - 使用较低版本避免Rust依赖
+fastapi==0.68.0
+uvicorn[standard]==0.15.0
 
 # HTTP客户端
-httpx==0.25.2
-aiohttp==3.9.1
+httpx==0.24.1
 
 # 环境变量
-python-dotenv==1.0.0
+python-dotenv==0.19.2
 
-# 数据验证
-pydantic==2.5.0
-email-validator==2.1.0
+# 数据验证 - 使用pydantic v1避免Rust编译
+pydantic==1.10.7
 
-# 认证和安全
-python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
-
-# 云端翻译服务
-openai==1.3.8
-azure-ai-translation-text==1.0.0
-google-cloud-translate==3.12.1
-deepl==1.16.1
-
-# 工具库
+# 基础工具
 python-dateutil==2.8.2
-pytz==2023.3
-psutil==5.9.6
 
-# 注意：本地模型依赖（torch, transformers）已移除
-# 在Render部署中将使用云端翻译API 
+# 云端翻译API (可选，需要API密钥时取消注释)
+# openai==0.27.8
+# azure-ai-translation-text==1.0.0
+# deepl==1.12.0
+
+# 注意：已移除所有需要编译的依赖
+# 如果需要翻译功能，请在环境变量中配置API密钥 
