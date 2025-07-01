@@ -184,7 +184,8 @@ class MultillingualForumHandler(BaseHTTPRequestHandler):
         """发送CORS头部"""
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
+        self.send_header('Access-Control-Allow-Credentials', 'true')
 
     def log_message(self, format, *args):
         """自定义日志格式"""
