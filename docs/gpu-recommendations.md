@@ -247,3 +247,8 @@ CMD ["python3", "translation_server.py"]
 - 考虑本地化的语言模型微调
 
 这个指南应该能帮助您根据项目规模和预算选择最适合的GPU云服务器和大模型方案。建议从云端API开始，随着用户增长逐步迁移到自托管方案。 
+
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With
+Access-Control-Allow-Credentials: true 
